@@ -1,15 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class RubyController : MonoBehaviour
 {
-    public float speed = 3.0f;
+    [SerializeField] private float _shootingTime = 1.2f;
+    
+    public float Speed = 3.0f;
 
     public int maxHealth = 5;
     public float timeInvincible = 2.0f;
 
-    public int health { get { return currentHealth; } }
+    public int health => currentHealth;
+    
+    
     int currentHealth;
 
     bool isInvincible;
@@ -23,6 +28,8 @@ public class RubyController : MonoBehaviour
     float horizontal;
     float vertical;
 
+    private float _elapsedTime = 0f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,6 +42,7 @@ public class RubyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        _elapsedTime += Time.deltaTime;
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
 
@@ -56,10 +64,15 @@ public class RubyController : MonoBehaviour
             if (invincibleTimer < 0)
                 isInvincible = false;
         }
+        
         if (Input.GetKeyDown(KeyCode.C))
         {
+            if (_elapsedTime < _shootingTime) return;
+            
             Launch();
+            _elapsedTime = 0f;
         }
+        
         if (Input.GetKeyDown(KeyCode.X))
         {
             RaycastHit2D hit = Physics2D.Raycast(rigidbody2d.position + Vector2.up * 0.2f, lookDirection, 1.5f, LayerMask.GetMask("NPC"));
@@ -77,8 +90,8 @@ public class RubyController : MonoBehaviour
     void FixedUpdate()
     {
         Vector2 position = rigidbody2d.position;
-        position.x = position.x + speed * horizontal * Time.deltaTime;
-        position.y = position.y + speed * vertical * Time.deltaTime;
+        position.x = position.x + Speed * horizontal * Time.deltaTime;
+        position.y = position.y + Speed * vertical * Time.deltaTime;
 
         rigidbody2d.MovePosition(position);
     }
