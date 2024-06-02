@@ -6,6 +6,8 @@ using UnityEngine.Serialization;
 public class RubyController : MonoBehaviour
 {
     [SerializeField] private float _shootingTime = 1.2f;
+    [SerializeField] private GameObject _gameCanvas;
+    [SerializeField] private GameObject _pauseCanvas;
     
     public float Speed = 3.0f;
 
@@ -84,6 +86,13 @@ public class RubyController : MonoBehaviour
                     character.DisplayDialog();
                 }
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            _gameCanvas.SetActive(false);
+            _pauseCanvas.SetActive(true);
+            Time.timeScale = 0;
         }
     }
 
