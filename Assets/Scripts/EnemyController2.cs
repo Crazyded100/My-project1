@@ -67,7 +67,7 @@ public class EnemyController2 : MonoBehaviour
     public void Fix()
     {
         broken = false;
-        rigidbody2D.simulated = false;
+       // rigidbody2D.simulated = false;
         animator.StopPlayback();
         animator.SetTrigger("Damaged");
     }
